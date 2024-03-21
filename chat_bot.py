@@ -54,22 +54,27 @@ However, the focus of this website is to provide a comprehensive introduction an
         yield word + " "
         time.sleep(0.08)
 def create_data_frame(type):
-    df = pd.DataFrame(np.random.randn(50, 20), columns = ("col %d" % i for i in range(20)))
+    #df = pd.DataFrame(np.random.randn(50, 20), columns = ("col %d" % i for i in range(20)))
     columns = ["Name","Cause", "Age at diagnosis", "Risk factors", "Symptoms", "Treatment", "Frequency"]
     type1 = [type,"The body destroys the insulin-producing cells ", "Often in childhood or adolescence ", "Genetic predisposition and severe viral infection such as mumps in childhood", "Great thirst, tiredness, excessive urination or severe weight loss", "Daily insulin injections necessary", "Approximately five percent of all people affected"]
     type2 = [type,"Insulin resistance or insufficient insulin production", "Mostly in adulthood", "Genetic predisposition and obesity, too little exercise or an unhealthy, high-sugar diet", "Often only tiredness, weakness, visual disturbances or higher risk of infection", "Healthy diet and exercise, oral medication (tablets) or rarely insulin injections", "Approximately 95 percent of all people affected"]
     type3 = [type,"genetic defects, infections or diseases of the pancreas", "-", "-", "chronic increase in blood sugar", "With this type, treatment and therapeutic success are highly dependent on the respective cause. Therapies must therefore be individually adapted", "-"]
     typeg = [type,"During pregnancy, the body needs more energy and therefore produces more insulin to transport the glucose into the cells. However, sometimes this system does not work properly. This means that the glucose does not enter the cells efficiently and remains in the blood instead. As a result, blood glucose levels remain higher than normal. The mother's increased blood sugar affects the fetus, which reacts by producing more insulin. This leads to increased growth and increased fat deposition in the fetus. This in turn can later increase the risk of obesity and type 2 diabetes in the child. Gestational diabetes usually occurs in the last third of pregnancy and disappears again after the birth. Risk factors for gestational diabetes include obesity, the presence of type 2 diabetes in the family and the age of the mother, especially from 30 years onwards.", "", "", "In most cases, the mother experiences no recognizable symptoms and the typical symptoms of diabetes are not present. However, symptoms that may occur can be similar to those of normal pregnancy symptoms, such as severe thirst, frequent urination and tiredness. However, if the mother had gestational diabetes, newborns often have low blood sugar levels. For more information on diabetes in children, we recommend our article: Diabetes in children: symptoms and treatment.", "With gestational diabetes, there is a slightly increased risk of certain birth complication, particularly because the child may have excessive growth, a s previously mentioned. However, in 85% of cases, a change in diet has proven to be an effective treatment. Similarly, regular exercise, particularly in the form of 'pregnancy-friendly' activities such a s swimming or walking, helps to reduce the risk.", ""]
     if type == "autoimmune disease":
-        df = pd.DataFrame(type1, columns=columns)
+        df = pd.DataFrame([type1])
     elif type == "insulin resistance":
-        df = pd.DataFrame(type2, columns=columns)
+        df = pd.DataFrame([type2])
     elif type == "3":
-        df = pd.DataFrame(type3, columns=columns)
+        df = pd.DataFrame([type3])
     elif type == "gestational":
-        df = pd.DataFrame(typeg, columns=columns)
+        df = pd.DataFrame([typeg])
     else:
         df = pd.DataFrame("Error appeared")
+    df = df.transpose()
+    row_titles = ['Names']
+    df.index = columns
+    df.columns = ["Name"]
+    df.index.name = 'Row Title'
     return df
 #Setting up all components of the sidebar, with title, login check, video-frame(expandabale) and links to the website to enableme
 with st.sidebar:
@@ -182,23 +187,3 @@ if st.session_state.stage == -1:
 
 
 
-"""
- if "messages" not in st.session_state.keys():
-        st.session_state.messages = [{"role": "assistant", "content": "Diabetes Support"}]
-
-    for message in st.session_state.messages:
-        with st.chat_message(message["role"]):
-            st.write(message["content"])
-    if prompt := st.chat_input(disabled=not (hf_email and hf_pass)):
-        st.session_state.messages.append({"role": "user", "content": prompt})
-        with st.chat_message("user"):
-            st.write(prompt)
-
-    if st.session_state.messages[-1]["role"] != "assistant":
-        with st.chat_message("assistant"):
-            with st.spinner("Thinking..."):
-                response = generate_response(prompt, hf_email, hf_pass)
-                st.write(response)
-        message = {"role": "assistant", "content": response}
-        st.session_state.messages.append(message)
-"""
