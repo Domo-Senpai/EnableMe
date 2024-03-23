@@ -1,16 +1,24 @@
-import textwrap
-import time
+"""
+This Project was created to apply to EnableMe
+This is a Chatbot, which is specified to work as helper to the own disease, especially diabetes.
 
+Inspired is the Chatbot by this tutorial :
+https://blog.streamlit.io/how-to-build-an-llm-powered-chatbot-with-streamlit/
+
+"""
+
+#Imports with the essential of hugchat and streamlit
+import time
 import streamlit as st
 from hugchat import hugchat
 from hugchat.login import Login
 import pandas as pd
-import numpy as np
+
+#predefined Prompt-Attachment, like a custom-prompt, for each diabetes-type
 type1 = "The question should be interpreted in connection with the background that type 1 autoimmune disease diabetes is prevalent: "
 type2 = "The question should be interpreted in connection with the background that type 2 insulin resistance diabetes is prevalent: "
 type3 = "The question should be interpreted in connection with the background that type 3 diabetes is prevalent: "
 type4 = "The question should be interpreted in connection with the background that Gestational  diabetes is prevalent: "
-# Source of the Template/Standardpage Code "https://blog.streamlit.io/how-to-build-an-llm-powered-chatbot-with-streamlit/"
 
 
 # Settings of the Mainpage, with Title and a change to the sidebar
@@ -31,13 +39,19 @@ st.markdown(
 )
 
 
-# Function to interact with the LLM, hosted by HuggingFace, Login with the secrets.toml file
+# Function to interact with the LLM, hosted by HuggingFace, Login via the credentials of the secrets.toml file
+#Parameters are the credentials and the Userinput
+#Return value is the answer of the LLM
+
 def generate_response(prompt_input, email, passwd):
     sign = Login(email, passwd)
     cookies = sign.login()
     chatbot = hugchat.ChatBot(cookies=cookies.get_dict())
     return chatbot.chat(prompt_input)
 
+#Similar function as the generate_response, just specified with the prompt
+#Parameters are the credentials and the Userinput
+#Return value is the answer of the LLM
 def generate_responsetype1(prompt_input, email, passwd):
     sign = Login(email, passwd)
     cookies = sign.login()
@@ -45,12 +59,19 @@ def generate_responsetype1(prompt_input, email, passwd):
     prompt = type1 + prompt_input
     return chatbot.chat(prompt)
 
+#Similar function as the generate_response, just specified with the prompt
+#Parameters are the credentials and the Userinput
+#Return value is the answer of the LLM
 def generate_responsetype2(prompt_input, email, passwd):
     sign = Login(email, passwd)
     cookies = sign.login()
     chatbot = hugchat.ChatBot(cookies=cookies.get_dict())
     prompt = type2 + prompt_input
     return chatbot.chat(prompt)
+
+#Similar function as the generate_response, just specified with the prompt
+#Parameters are the credentials and the Userinput
+#Return value is the answer of the LLM
 
 def generate_responsetype3(prompt_input, email, passwd):
     sign = Login(email, passwd)
@@ -59,6 +80,9 @@ def generate_responsetype3(prompt_input, email, passwd):
     prompt = type3 + prompt_input
     return chatbot.chat(prompt)
 
+#Similar function as the generate_response, just specified with the prompt
+#Parameters are the credentials and the Userinput
+#Return value is the answer of the LLM
 def generate_responsetype4(prompt_input, email, passwd):
     sign = Login(email, passwd)
     cookies = sign.login()
@@ -67,47 +91,53 @@ def generate_responsetype4(prompt_input, email, passwd):
     return chatbot.chat(prompt)
 
 
-# Function to display the explanation of this webapp in a stream
+# Function to display the explanation of this webapp in a stream, with a animation, so it seems it is written at the moment
 def stream_explanation():
     text_string = """This web application is designed to make it easier for them to get to grips with diabetes. 
     There is access to data specific to their type of disease, as well as an explanatory video. Access to the text version on the website is also possible.
      You can also clarify your personal questions with our chatbot.
     It will then respond specifically to the questions based on your chosen situation and help you further. 
-    
+
 Your data will not be stored and will not be used to improve our AI. """
     for word in text_string.split(" "):
         yield word + " "
         time.sleep(0.08)
 
+# Function to display the possibilities of persons which arent interesseted in diabetes in a stream, with a animation, so it seems it is written at the moment
 
 def stream_what_else():
     text_string = """Here on this platform, you have the opportunity to get detailed information about diabetes or go to the EnableMe homepage to get a broader range of knowledge about various diseases. You can also interact with our chatbot to clarify specific questions about prevention or simply get additional information.
-    
-    
+
+
 However, the focus of this website is to provide a comprehensive introduction and support for people living with diabetes. We provide resources, tips and a supportive environment for people affected by this disease to help them manage their daily lives and support them in living a healthy and fulfilling life.
  """
     for word in text_string.split(" "):
         yield word + " "
         time.sleep(0.08)
 
-
+#Function to hold the Dataframe with different facts about the disease
+#Return value is the DataFrame created from the list
 def get_diabetes_1():
-    df = pd.DataFrame([["autoimmune disease", "The body destroys the insulin-producing cells ", "Often in childhood or adolescence ",
-                        "Genetic predisposition and severe viral infection such as mumps in childhood",
-                        "Great thirst, tiredness, excessive urination or severe weight loss",
-                        "Daily insulin injections necessary", "Approximately five percent of all people affected"]])
+    df = pd.DataFrame(
+        [["autoimmune disease", "The body destroys the insulin-producing cells ", "Often in childhood or adolescence ",
+          "Genetic predisposition and severe viral infection such as mumps in childhood",
+          "Great thirst, tiredness, excessive urination or severe weight loss",
+          "Daily insulin injections necessary", "Approximately five percent of all people affected"]])
     return df
 
-
+#Function to hold the Dataframe with different facts about the disease
+#Return value is the DataFrame created from the list
 def get_diabetes_2():
-    df = pd.DataFrame([["insulin resistance", "Insulin resistance or insufficient insulin production", "Mostly in adulthood",
-                        "Genetic predisposition and obesity, too little exercise or an unhealthy, high-sugar diet",
-                        "Often only tiredness, weakness, visual disturbances or higher risk of infection",
-                        "Healthy diet and exercise, oral medication (tablets) or rarely insulin injections",
-                        "Approximately 95 percent of all people affected"]])
+    df = pd.DataFrame(
+        [["insulin resistance", "Insulin resistance or insufficient insulin production", "Mostly in adulthood",
+          "Genetic predisposition and obesity, too little exercise or an unhealthy, high-sugar diet",
+          "Often only tiredness, weakness, visual disturbances or higher risk of infection",
+          "Healthy diet and exercise, oral medication (tablets) or rarely insulin injections",
+          "Approximately 95 percent of all people affected"]])
     return df
 
-
+#Function to hold the Dataframe with different facts about the disease
+#Return value is the DataFrame created from the list
 def get_diabetes_3():
     df = pd.DataFrame([["3", "genetic defects, infections or diseases of the pancreas", "-", "-",
                         "chronic increase in blood sugar",
@@ -115,7 +145,8 @@ def get_diabetes_3():
                         "-"]])
     return df
 
-
+#Function to hold the Dataframe with different facts about the disease
+#Return value is the DataFrame created from the list
 def get_diabetes_4():
     df = pd.DataFrame([["gestational",
                         "During pregnancy, the body needs more energy and therefore produces more insulin to transport the glucose into the cells. However, sometimes this system does not work properly. This means that the glucose does not enter the cells efficiently and remains in the blood instead. As a result, blood glucose levels remain higher than normal. The mother's increased blood sugar affects the fetus, which reacts by producing more insulin. This leads to increased growth and increased fat deposition in the fetus. This in turn can later increase the risk of obesity and type 2 diabetes in the child. Gestational diabetes usually occurs in the last third of pregnancy and disappears again after the birth. Risk factors for gestational diabetes include obesity, the presence of type 2 diabetes in the family and the age of the mother, especially from 30 years onwards.",
@@ -125,6 +156,8 @@ def get_diabetes_4():
                         ""]])
     return df
 
+#Function to merge the column-title to the specific types of diabetes and display the dataframe
+#Parameter is a number to identify the type
 
 def create_data_frame(number):
     columns = ["Name", "Cause", "Age at diagnosis", "Risk factors", "Symptoms", "Treatment", "Frequency"]
@@ -145,7 +178,8 @@ def create_data_frame(number):
     st.subheader("Overview")
     st.dataframe(df)
 
-
+#Function to display the description and if given the images of the different types of diabetes
+#Parameter is a number to identify the type
 def visualize_content(dia_type):
     if dia_type == "autoimmune disease":
         col1, col2 = st.columns(2)
@@ -192,10 +226,13 @@ def visualize_content(dia_type):
             st.button("Diabetes Type 2 Chatbot", on_click=set_state, args=[20])
         create_data_frame(2)
         st.caption("Type 2 diabetes - insulin resistance")
-        st.write("Type 2 diabetes is a metabolic disease in which the body either does not produce enough insulin or the insulin that is produced cannot be used effectively. It typically develops in adulthood.")
+        st.write(
+            "Type 2 diabetes is a metabolic disease in which the body either does not produce enough insulin or the insulin that is produced cannot be used effectively. It typically develops in adulthood.")
         st.caption("Type 2 diabetes: Cause")
-        st.write("In type 2 diabetes, the production of insulin by the pancreas is insufficient or the body cannot use it effectively to convert blood sugar into energy, which is known as insulin resistance. Around 95 percent of all diabetes cases are type 2. A genetic predisposition can play a role, similar to type 1.")
-        st.write("Type 2 diabetes usually occurs in adults and older people, with an unhealthy lifestyle characterized by little exercise and obesity being the main cause. In recent years, however, there has been an increase in type 2 diabetes in overweight children and adolescents. This underlines the importance of a healthy lifestyle for the prevention of this disease, which is not limited to older age groups.")
+        st.write(
+            "In type 2 diabetes, the production of insulin by the pancreas is insufficient or the body cannot use it effectively to convert blood sugar into energy, which is known as insulin resistance. Around 95 percent of all diabetes cases are type 2. A genetic predisposition can play a role, similar to type 1.")
+        st.write(
+            "Type 2 diabetes usually occurs in adults and older people, with an unhealthy lifestyle characterized by little exercise and obesity being the main cause. In recent years, however, there has been an increase in type 2 diabetes in overweight children and adolescents. This underlines the importance of a healthy lifestyle for the prevention of this disease, which is not limited to older age groups.")
         st.caption("Type 2 diabetes: Symptoms")
         st.image("Images/diabetes-typ-2-erkennen~-~media--df42eb16--query.webp")
         st.write("In the initial phase of type 2 diabetes, there are often only symptoms such as")
@@ -204,10 +241,13 @@ def visualize_content(dia_type):
         st.write("                 -visual disturbances")
         st.write("                 -Higher risk of infection")
         st.write("                 -Poor wound healing (wounds heal more slowly)")
-        st.write("As these symptoms are unspecific, it often takes several years before type 2 diabetes is diagnosed. As a result, many people with diabetes do not even know that they have the disease. If you think you might have type 2 diabetes, you should consult your family doctor. The specialist will carry out various tests, for example to check your long-term blood glucose level and confirm the diagnosis.")
+        st.write(
+            "As these symptoms are unspecific, it often takes several years before type 2 diabetes is diagnosed. As a result, many people with diabetes do not even know that they have the disease. If you think you might have type 2 diabetes, you should consult your family doctor. The specialist will carry out various tests, for example to check your long-term blood glucose level and confirm the diagnosis.")
         st.caption("Type 2 diabetes: treatment and therapy")
-        st.write("Type 2 treatment consists of a balanced diet, regular exercise and a reduction in body weight. If the elevated blood sugar levels cannot be normalized through a change in lifestyle, oral ant idiabetic drugs (tablets) are administered. If oral antidiabetics are also not sufficient, insulin therapy is necessary, just as with type 1.")
-        st.write("Untreated type 2 diabetes, especially in older people, can lead to severely elevated blood sugar levels (hyperglycaemia) over time. There is then a risk of a diabetic coma (dehydration coma).")
+        st.write(
+            "Type 2 treatment consists of a balanced diet, regular exercise and a reduction in body weight. If the elevated blood sugar levels cannot be normalized through a change in lifestyle, oral ant idiabetic drugs (tablets) are administered. If oral antidiabetics are also not sufficient, insulin therapy is necessary, just as with type 1.")
+        st.write(
+            "Untreated type 2 diabetes, especially in older people, can lead to severely elevated blood sugar levels (hyperglycaemia) over time. There is then a risk of a diabetic coma (dehydration coma).")
     elif dia_type == "3":
         col1, col2 = st.columns(2)
 
@@ -219,11 +259,14 @@ def visualize_content(dia_type):
             st.button("Diabetes Type 3 Chatbot", on_click=set_state, args=[30])
         create_data_frame(3)
         st.caption("Type 3 diabetes - secondary forms of diabetes or other types of diabetes")
-        st.write("Type 3 diabetes includes all forms of diabetes that do not fall under type 1 or type 2. Like the other types, however, this also involves a chronic increase in blood sugar.")
+        st.write(
+            "Type 3 diabetes includes all forms of diabetes that do not fall under type 1 or type 2. Like the other types, however, this also involves a chronic increase in blood sugar.")
         st.caption("Type 3 diabetes: Cause")
-        st.write("Since 2019, other rare forms of diabetes mellitus have been summarized under the term 'secondary forms of diabetes' or 'other types of diabetes'. These forms are characterized by mixtures of different features. The causes can be genetic defects, infections or diseases of the pancreas.")
+        st.write(
+            "Since 2019, other rare forms of diabetes mellitus have been summarized under the term 'secondary forms of diabetes' or 'other types of diabetes'. These forms are characterized by mixtures of different features. The causes can be genetic defects, infections or diseases of the pancreas.")
         st.caption("Type 3 diabetes: treatment and therapy")
-        st.write("With this type, treatment and therapeutic success are highly dependent on the respective cause. Therapies must therefore be individually adapted.")
+        st.write(
+            "With this type, treatment and therapeutic success are highly dependent on the respective cause. Therapies must therefore be individually adapted.")
 
     elif dia_type == "gestational":
         col1, col2 = st.columns(2)
@@ -236,21 +279,50 @@ def visualize_content(dia_type):
             st.button("Diabetes Type 4 Chatbot", on_click=set_state, args=[40])
         create_data_frame(4)
         st.caption("Type 4 diabetes - gestational or gestational diabetes")
-        st.write("Type 4 diabetes involves elevated blood sugar, which is first detected during pregnancy and is triggered by excess insulin production. Gestational diabetes is one of the most common complications of pregnancy and can lead to later health problems for the child.")
+        st.write(
+            "Type 4 diabetes involves elevated blood sugar, which is first detected during pregnancy and is triggered by excess insulin production. Gestational diabetes is one of the most common complications of pregnancy and can lead to later health problems for the child.")
         st.caption("Type 4 diabetes: Cause")
-        st.write("During pregnancy, the body needs more energy and therefore produces more insulin to transport the glucose into the cells. However, sometimes this system does not work properly. This means that the glucose does not enter the cells efficiently and remains in the blood instead. As a result, blood glucose levels remain higher than normal.")
-        st.write("The mother's increased blood sugar affects the fetus, which reacts by producing more insulin. This leads to increased growth and increased fat deposition in the fetus. This in turn can later increase the risk of obesity and type 2 diabetes in the child.")
-        st.write("Gestational diabetes usually occurs in the last trimester of pregnancy and disappears again after the birth. Risk factors for gestational diabetes include obesity, the presence of type 2 diabetes in the family and the age of the mother, especially from the age of 30.")
+        st.write(
+            "During pregnancy, the body needs more energy and therefore produces more insulin to transport the glucose into the cells. However, sometimes this system does not work properly. This means that the glucose does not enter the cells efficiently and remains in the blood instead. As a result, blood glucose levels remain higher than normal.")
+        st.write(
+            "The mother's increased blood sugar affects the fetus, which reacts by producing more insulin. This leads to increased growth and increased fat deposition in the fetus. This in turn can later increase the risk of obesity and type 2 diabetes in the child.")
+        st.write(
+            "Gestational diabetes usually occurs in the last trimester of pregnancy and disappears again after the birth. Risk factors for gestational diabetes include obesity, the presence of type 2 diabetes in the family and the age of the mother, especially from the age of 30.")
         st.caption("Type 4 diabetes: symptoms")
-        st.write("In most cases, the mother experiences no recognizable symptoms and the typical symptoms of diabetes are not present. However, symptoms that may occur can be similar to those of normal pregnancy symptoms, such as severe thirst, frequent urination and fatigue.")
-        st.write("However, if the mother had gestational diabetes, newborns often have low blood sugar levels. For more information on diabetes in children, we recommend our article: Diabetes in children: symptoms and treatment.")
+        st.write(
+            "In most cases, the mother experiences no recognizable symptoms and the typical symptoms of diabetes are not present. However, symptoms that may occur can be similar to those of normal pregnancy symptoms, such as severe thirst, frequent urination and fatigue.")
+        st.write(
+            "However, if the mother had gestational diabetes, newborns often have low blood sugar levels. For more information on diabetes in children, we recommend our article: Diabetes in children: symptoms and treatment.")
         st.caption("Type 4 diabetes: treatment and therapy")
-        st.write("With gestational diabetes, there is a slightly increased risk of certain birth complications, particularly because the child may have excessive growth, a s previously mentioned.")
-        st.write("In 85% of cases, however, a change in diet has proven to be an effective treatment. Regular exercise, especially in the form of 'pregnancy-friendly' activities such as swimming or walking, also helps to reduce the risk.")
+        st.write(
+            "With gestational diabetes, there is a slightly increased risk of certain birth complications, particularly because the child may have excessive growth, a s previously mentioned.")
+        st.write(
+            "In 85% of cases, however, a change in diet has proven to be an effective treatment. Regular exercise, especially in the form of 'pregnancy-friendly' activities such as swimming or walking, also helps to reduce the risk.")
 
     else:
         st.write("Error appeared")
+#Function to set in the sessionstate different arguments
+#Parameters are the numbers which subpage should be opened, the type of diabetes as string and a list of possible types of diabetes
+def set_state(number, type_of_diabetes="not known", possible_diabetes=None):
+    st.session_state.stage = number
+    st.session_state.type = type_of_diabetes
+    st.session_state.possible_diabetes = possible_diabetes
 
+#Function to evaluate the question-catalog which will help to findout which type of diabetes is present
+#Parameters q1-q10 strings which are the answers to the questions
+#Returnvalue is the list, possible empty
+def check_values(q1, q2, q3, q4, q5, q6, q7, q8, q9, q10):
+    list_of_possiblities = []
+    if (q1 == "Yes" and q2 == "Yes" and q3 == "Yes") or (q1 == "Yes" and q8 == "Low (less than 30 minutes per day"):
+        list_of_possiblities.append("autoimmune disease")
+    if (
+            q1 == "Yes" and q2 == "Yes" and q3 == "Yes" and q4 == "Yes") or q8 == "Moderate (30-60 minutes per day)" or q8 == "High (more than 60 minutes per day)":
+        list_of_possiblities.append("insulin resistance")
+    if q1 == "Yes" and q5 == "Yes" and q6 == "Yes" and q7 == "Yes" and q9 == "Yes":
+        list_of_possiblities.append("gestational")
+    if q10 == "Yes":
+        list_of_possiblities.append("3")
+    return list_of_possiblities
 
 # Setting up all components of the sidebar, with title, login check, video-frame(expandabale) and links to the website to enableme
 with st.sidebar:
@@ -278,24 +350,10 @@ if 'type' not in st.session_state:
     st.session_state.type = "not known"
 
 
-def set_state(i, type_of_diabetes="not known", possible_diabetes=None):
-    st.session_state.stage = i
-    st.session_state.type = type_of_diabetes
-    st.session_state.possible_diabetes = possible_diabetes
 
-def check_values(q1,q2,q3,q4,q5,q6,q7,q8, q9, q10):
-    list_of_possiblities = []
-    if (q1 == "Yes" and q2 == "Yes" and q3 == "Yes") or (q1 == "Yes" and q8 == "Low (less than 30 minutes per day"):
-        list_of_possiblities.append("autoimmune disease")
-    if (q1 == "Yes" and q2 == "Yes" and q3 == "Yes" and q4 == "Yes") or q8 == "Moderate (30-60 minutes per day)" or q8 == "High (more than 60 minutes per day)":
-        list_of_possiblities.append("insulin resistance")
-    if q1 == "Yes" and q5 == "Yes" and q6 == "Yes" and q7 == "Yes" and q9 == "Yes":
-        list_of_possiblities.append("gestational")
-    if q10 == "Yes":
-        list_of_possiblities.append("3")
-    return list_of_possiblities
+#Subpages identified by a integer(also negative)
 
-# Starting in the section of choosing what to do
+# Starting in the section of choosing what to do, the home of the website
 if st.session_state.stage == 0:
     st.header("Hello you, Iam your helper to get you into your disease")
     st.subheader("How to get started into  these helping service")
@@ -307,7 +365,7 @@ if st.session_state.stage == 0:
     st.button("what is that here?", on_click=set_state, args=[-2])
     st.button("I don't have diabetes, what to do here?", on_click=set_state, args=[-3])
     st.button("direct to the chatbot", on_click=set_state, args=[-1])
-
+#Subpage of the choice of diabetes types
 if st.session_state.stage == 1:
     st.subheader("If you know which type of diabetes you got, please select.")
     st.button('Type 1 - autoimmune disease', on_click=set_state, args=[2, "autoimmune disease"])
@@ -317,20 +375,14 @@ if st.session_state.stage == 1:
     st.button("I don't know", on_click=set_state, args=[-4])
     st.button("back home", on_click=set_state, args=[0])
     st.button("direct to the chatbot", on_click=set_state, args=[-1])
-
+#Subpage of the choosen type of diabetes
 if st.session_state.stage == 2:
     if st.session_state.type == "not known":
         name = st.header(f"Not selected which Type of Diabetes")
     else:
         name = st.header(f"Your Diabetes Type:  {st.session_state.type}")
-    # autoimmune disease
-    # insulin resistance
-    # 3
-    # gestational
-
     visualize_content(st.session_state.type)
-
-
+#Subpage of the question-answering to evaluate the diabetes type which is present
 if st.session_state.stage == -4:
     col1, col2 = st.columns(2)
 
@@ -362,7 +414,8 @@ if st.session_state.stage == -4:
         ["Yes", "No"])
     q8 = st.radio(
         "How would you describe your physical activity?",
-        ["Low (less than 30 minutes per day)", "Moderate (30-60 minutes per day)", "High (more than 60 minutes per day)"])
+        ["Low (less than 30 minutes per day)", "Moderate (30-60 minutes per day)",
+         "High (more than 60 minutes per day)"])
     q9 = st.radio(
         "Are you pregnant",
         ["Yes", "No"])
@@ -372,27 +425,25 @@ if st.session_state.stage == -4:
 
     possible_values = []
 
-    possible_values = check_values(q1,q2,q3,q4,q5,q6,q7,q8, q9, q10)
-    st.button("Submit", on_click=set_state, args=[99, "not known",possible_values])
-
-
+    possible_values = check_values(q1, q2, q3, q4, q5, q6, q7, q8, q9, q10)
+    st.button("Submit", on_click=set_state, args=[99, "not known", possible_values])
+#Subpage which reads what can be done, if no interesst in chating or diabetes exists
 if st.session_state.stage == -3:
     st.button("Home", on_click=set_state, args=[0])
-
     st.subheader("What else?")
     st.write_stream(stream_what_else())
     st.button("direct to the chatbot", on_click=set_state, args=[-1])
+#Subpage which explains the usage of the Webpage and what to do on this website
 if st.session_state.stage == -2:
     st.button("Home", on_click=set_state, args=[0])
-
     st.subheader("Explanation")
     st.write_stream(stream_explanation)
     st.button("direct to the chatbot", on_click=set_state, args=[-1])
+#Supage with the chatbot which has no custom-prompt
 if st.session_state.stage == -1:
     st.button("Home", on_click=set_state, args=[0])
     if "messages" not in st.session_state.keys():
         st.session_state.messages = [{"role": "assistant", "content": "Diabetes Support"}]
-
     for message in st.session_state.messages:
         with st.chat_message(message["role"]):
             st.write(message["content"])
@@ -400,7 +451,6 @@ if st.session_state.stage == -1:
         st.session_state.messages.append({"role": "user", "content": prompt})
         with st.chat_message("user"):
             st.write(prompt)
-
     if st.session_state.messages[-1]["role"] != "assistant":
         with st.chat_message("assistant"):
             with st.spinner("Thinking..."):
@@ -408,13 +458,13 @@ if st.session_state.stage == -1:
                 st.write(response)
         message = {"role": "assistant", "content": response}
         st.session_state.messages.append(message)
+#Subpage with the custom-prompt chatbot for diabetes type 1
 if st.session_state.stage == 10:
     st.header("Ask Question you need to know")
     st.subheader("Chat with the Bot about your Autoimmune disease Diabetes")
     st.button("Home", on_click=set_state, args=[0])
     if "messages" not in st.session_state.keys():
         st.session_state.messages = [{"role": "assistant", "content": "Autoimmune disease Diabetes Type 1 Support"}]
-
     for message in st.session_state.messages:
         with st.chat_message(message["role"]):
             st.write(message["content"])
@@ -422,22 +472,21 @@ if st.session_state.stage == 10:
         st.session_state.messages.append({"role": "user", "content": prompt})
         with st.chat_message("user"):
             st.write(prompt)
-
     if st.session_state.messages[-1]["role"] != "assistant":
         with st.chat_message("assistant"):
             with st.spinner("Thinking..."):
                 response = generate_responsetype1(prompt, hf_email, hf_pass)
-                #response = response["response"].replace(type1, "")
+                # response = response["response"].replace(type1, "")
                 st.write(response)
         message = {"role": "assistant", "content": response}
         st.session_state.messages.append(message)
+#Subpage with the custom-prompt chatbot for diabetes type 2
 if st.session_state.stage == 20:
     st.header("Ask Question you need to know")
     st.subheader("Chat with the Bot about your Insulin resistance Diabetes")
     st.button("Home", on_click=set_state, args=[0])
     if "messages" not in st.session_state.keys():
         st.session_state.messages = [{"role": "assistant", "content": "Insulin resistance Diabetes Type 2 Support"}]
-
     for message in st.session_state.messages:
         with st.chat_message(message["role"]):
             st.write(message["content"])
@@ -445,7 +494,6 @@ if st.session_state.stage == 20:
         st.session_state.messages.append({"role": "user", "content": prompt})
         with st.chat_message("user"):
             st.write(prompt)
-
     if st.session_state.messages[-1]["role"] != "assistant":
         with st.chat_message("assistant"):
             with st.spinner("Thinking..."):
@@ -454,13 +502,13 @@ if st.session_state.stage == 20:
                 st.write(response)
         message = {"role": "assistant", "content": response}
         st.session_state.messages.append(message)
+#Subpage with the custom-prompt chatbot for diabetes type 3
 if st.session_state.stage == 30:
     st.header("Ask Question you need to know")
     st.subheader("Chat with the Bot about your Type 3 Diabetes")
     st.button("Home", on_click=set_state, args=[0])
     if "messages" not in st.session_state.keys():
         st.session_state.messages = [{"role": "assistant", "content": "Diabetes Type 3 Support"}]
-
     for message in st.session_state.messages:
         with st.chat_message(message["role"]):
             st.write(message["content"])
@@ -468,7 +516,6 @@ if st.session_state.stage == 30:
         st.session_state.messages.append({"role": "user", "content": prompt})
         with st.chat_message("user"):
             st.write(prompt)
-
     if st.session_state.messages[-1]["role"] != "assistant":
         with st.chat_message("assistant"):
             with st.spinner("Thinking..."):
@@ -477,13 +524,13 @@ if st.session_state.stage == 30:
                 st.write(response)
         message = {"role": "assistant", "content": response}
         st.session_state.messages.append(message)
+#Subpage with the custom-prompt chatbot for diabetes type 4
 if st.session_state.stage == 40:
     st.header("Ask Question you need to know")
     st.subheader("Chat with the Bot about your Gestational Diabetes")
     st.button("Home", on_click=set_state, args=[0])
     if "messages" not in st.session_state.keys():
         st.session_state.messages = [{"role": "assistant", "content": "Gestational Diabetes Support"}]
-
     for message in st.session_state.messages:
         with st.chat_message(message["role"]):
             st.write(message["content"])
@@ -491,7 +538,6 @@ if st.session_state.stage == 40:
         st.session_state.messages.append({"role": "user", "content": prompt})
         with st.chat_message("user"):
             st.write(prompt)
-
     if st.session_state.messages[-1]["role"] != "assistant":
         with st.chat_message("assistant"):
             with st.spinner("Thinking..."):
@@ -500,18 +546,16 @@ if st.session_state.stage == 40:
                 st.write(response)
         message = {"role": "assistant", "content": response}
         st.session_state.messages.append(message)
-
+#Subpage with evaluated and possible types of diabetes to move on to the informationpages of the diabetes types
 if st.session_state.stage == 99:
-
     col1, col2 = st.columns(2)
-
     with col1:
         st.button("Home", on_click=set_state, args=[0])
-
     with col2:
         st.button("direct to the chatbot", on_click=set_state, args=[-1])
     st.header("The possible Diabetes Types you got:")
-    st.subheader("Choose one to learn more about it, if there is a multiple choice you have to remember them to choose again if the first choosen wasnt the right one, after going back to home. ")
+    st.subheader(
+        "Choose one to learn more about it, if there is a multiple choice you have to remember them to choose again if the first choosen wasnt the right one, after going back to home. ")
     if "autoimmune disease" in st.session_state.possible_diabetes:
         st.button('Type 1 - autoimmune disease', on_click=set_state, args=[2, "autoimmune disease"])
     if "insulin resistance" in st.session_state.possible_diabetes:
